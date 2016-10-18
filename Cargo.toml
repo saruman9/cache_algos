@@ -1,0 +1,13 @@
+[package]
+name = "cache_algos"
+version = "0.1.0"
+authors = ["saruman9 <rum.274.4@gmail.com>"]
+
+[[bin]]
+doc = false
+name = "cache_algos"
+
+[dependencies]
+slog = "1"
+slog-term = "1"
+rand = "0.3"
