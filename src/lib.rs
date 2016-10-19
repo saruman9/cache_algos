@@ -6,7 +6,7 @@ extern crate rand;
 #[macro_use] extern crate slog;
 extern crate slog_term;
 
-use slog::DrainExt;
+// use slog::DrainExt;
 
 pub mod memory;
 pub mod fifo;
@@ -30,53 +30,50 @@ pub enum Algos {
     MQ,
 }
 
-pub struct CacheAlgo {
-    logger: slog::Logger,
-    ram: Vec<Vec<i32>>,
-    cache_algo: fifo::FifoCache,
-}
+// trait CacheAlgorithm {
+//     fn run(&mut self, ram: &Vec<Vec<i32>>) -> (i32, i32);
+// }
 
-impl CacheAlgo {
-    pub fn init(algo: Algos, size: usize, ram: Vec<Vec<i32>>, logger: Option<slog::Logger>) -> Self {
-        let logger = logger.unwrap_or(slog::Logger::root(slog_term::streamer().full().build().fuse(), o!()));
-        debug!(logger, "Created CacheAlgo with {:?} cache algorithm.", algo);
+// pub struct CacheAlgo<T> {
+//     logger: slog::Logger,
+//     ram: Vec<Vec<i32>>,
+//     cache_algo: Box<T>,
+// }
 
-        let algo = match algo {
-            Algos::Belady => unimplemented!(),
-            Algos::FIFO => fifo::FifoCache::new(size, Some(logger.clone())),
-            Algos::LRU => unimplemented!(),
-            Algos::MRU => unimplemented!(),
-            Algos::PLRU => unimplemented!(),
-            Algos::SLRU => unimplemented!(),
-            Algos::LFU => unimplemented!(),
-            Algos::RR => unimplemented!(),
-            Algos::TwoQ => unimplemented!(),
-            Algos::ARC => unimplemented!(),
-            Algos::CAR => unimplemented!(),
-            Algos::MQ => unimplemented!(),
-        };
+// impl<T: CacheAlgorithm> CacheAlgo<T> {
+//     pub fn init(algo: Algos, size: usize, ram: Vec<Vec<i32>>, logger: Option<slog::Logger>) -> Self {
+//         let logger = logger.unwrap_or(slog::Logger::root(slog_term::streamer().full().build().fuse(), o!()));
+//         debug!(logger, "Created CacheAlgo with {:?} cache algorithm.", algo);
 
-        CacheAlgo {
-            logger: logger,
-            ram: ram,
-            cache_algo: algo,
-        }
-    }
+//         let algo = match algo {
+//             Algos::Belady => belady::BeladyCache::new(size, Some(logger.clone())),
+//             // Algos::FIFO => fifo::FifoCache::new(size, Some(logger.clone())),
+//             Algos::FIFO => unimplemented!(),
+//             Algos::LRU => unimplemented!(),
+//             Algos::MRU => unimplemented!(),
+//             Algos::PLRU => unimplemented!(),
+//             Algos::SLRU => unimplemented!(),
+//             Algos::LFU => unimplemented!(),
+//             Algos::RR => unimplemented!(),
+//             Algos::TwoQ => unimplemented!(),
+//             Algos::ARC => unimplemented!(),
+//             Algos::CAR => unimplemented!(),
+//             Algos::MQ => unimplemented!(),
+//         };
 
-    pub fn with_ram(mut self, ram: Vec<Vec<i32>>) -> Self {
-        self.ram = ram;
-        self
-    }
+//         CacheAlgo::<T> {
+//             logger: logger,
+//             ram: ram,
+//             cache_algo: Box::new(algo),
+//         }
+//     }
 
-    pub fn run(&mut self) -> (i32, i32) {
-        self.cache_algo.run(&self.ram)
-    }
-}
+//     pub fn with_ram(mut self, ram: Vec<Vec<i32>>) -> Self {
+//         self.ram = ram;
+//         self
+//     }
 
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-    }
-}
+//     pub fn run(&mut self) -> (i32, i32) {
+//         self.cache_algo.run(&self.ram)
+//     }
+// }

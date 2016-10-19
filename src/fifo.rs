@@ -34,6 +34,9 @@ impl FifoCache {
     /// Return `true`, if the cache have element and `false` otherwise.
     pub fn hit(&mut self, val: &i32) -> bool {
         if self.cache.contains(&val) {
+            debug!(self.logger, "hit";
+                   "cache" => format!("{:?}", self.cache),
+                   "hit" => format!("{}", val));
             true
         } else {
             if self.cache.len() < self.size {
@@ -42,6 +45,9 @@ impl FifoCache {
                 self.cache.pop_back();
                 self.cache.push_front(val.clone());
             }
+            debug!(self.logger, "miss";
+                   "cache" => format!("{:?}", self.cache),
+                   "hit" => format!("{}", val));
             false
         }
     }

@@ -3,11 +3,13 @@
 //! TODO Write documentation.
 
 extern crate cache_algos;
-#[macro_use] extern crate slog;
+#[macro_use]
+extern crate slog;
 extern crate slog_term;
+extern crate slog_envlogger;
 
 use slog::DrainExt;
-use cache_algos::{CacheAlgo, Algos};
+use cache_algos::fifo::FifoCache;
 use cache_algos::memory::RamBuilder;
 
 fn main() {
@@ -18,7 +20,7 @@ fn main() {
         .with_all_random()
         .with_range_random(0, 1000)
         .build();
-    let mut test = CacheAlgo::init(Algos::FIFO, 100, ram, Some(logger));
 
-    println!("{:?}", test.run());
+    let mut fifo_cache = FifoCache::new(5, Some(logger.clone()));
+    println!("fifo: {:?}", fifo_cache.run(&ram));
 }
