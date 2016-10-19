@@ -10,6 +10,7 @@ extern crate slog_term;
 
 pub mod memory;
 pub mod fifo;
+pub mod belady;
 
 /// List of cache algorithms.
 ///
