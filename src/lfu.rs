@@ -4,9 +4,7 @@
 
 use slog;
 
-/// Implementation cache, based on a Belady algorithm.
-///
-/// TODO Write documentation.
+/// Implementation cache, based on a LFU algorithm.
 pub struct LFUCache {
     cache: Vec<(i32, usize)>,
     size: usize,

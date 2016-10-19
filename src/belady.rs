@@ -1,4 +1,4 @@
-//! Implementation of Belady (OPT) cache algorithm.
+//! Implementation of Bélády's (OPT) cache algorithm.
 //!
 //! The most efficient caching algorithm would be to always discard the information that will not be
 //! needed for the longest time in the future. This optimal result is referred to as Bélády's
@@ -11,9 +11,7 @@ use slog;
 
 use std::collections::VecDeque;
 
-/// Implementation cache, based on a Belady algorithm.
-///
-/// TODO Write documentation.
+/// Implementation cache, based on a Bélády's algorithm.
 pub struct BeladyCache {
     cache: Vec<i32>,
     size: usize,

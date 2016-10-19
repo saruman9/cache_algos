@@ -10,9 +10,7 @@ use slog;
 
 use std::collections::VecDeque;
 
-/// Implementation cache, based on a Belady algorithm.
-///
-/// TODO Write documentation.
+/// Implementation cache, based on a LRU algorithm.
 pub struct LRUCache {
     cache: VecDeque<i32>,
     size: usize,
