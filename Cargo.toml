@@ -9,5 +9,7 @@ name = "cache_algos"
 
 [dependencies]
 slog = "1"
-slog-term = "1"
+slog-term = "1.1"
+slog-envlogger = "0.5"
 rand = "0.3"
+
