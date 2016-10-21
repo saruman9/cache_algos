@@ -135,8 +135,8 @@ fn main() {
                         return
                     }
                     options.cache_size = env::args().nth(i + 1).map(|x| x.parse().unwrap());
-                    if options.cache_size.unwrap() == 0 {
-                        panic!("Cache size must be greater than 0!");
+                    if options.cache_size.unwrap() < 2 {
+                        panic!("Cache size must be greater than 1!");
                     }
                 },
                 a @ "BELADY" | a @ "FIFO" | a @ "LRU" | a @ "LFU" | a @ "RR" | a @ "MRU" | a @ "SLRU" => {
