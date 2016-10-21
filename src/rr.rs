@@ -1,22 +1,25 @@
-//! Implementation of LFU cache algorithm.
+//! Implementation of RR cache algorithm.
 //!
-//! Counts how often an item is needed. Those that are used least often are discarded first.
+//! Randomly selects a candidate item and discards it to make space when necessary. This algorithm
+//! does not require keeping any information about the access history.
 
 use slog;
+use rand::{self, Rng};
+use rand::distributions::{IndependentSample, Range};
 
-/// Implementation cache, based on a LFU algorithm.
-pub struct LFUCache {
-    cache: Vec<(i32, usize)>,
+/// Implementation cache, based on a RR algorithm.
+pub struct RRCache {
+    cache: Vec<i32>,
     size: usize,
     logger: slog::Logger,
 }
 
-impl LFUCache {
+impl RRCache {
     /// Create new cache with fix size.
     pub fn new(size: usize, logger: Option<slog::Logger>) -> Self {
         let logger = logger.unwrap_or(slog::Logger::root(slog::Discard, o!()));
-        debug!(logger, "Created LFU cache with size: {}", size);
-        LFUCache {
+        debug!(logger, "Created RR cache with size: {}", size);
+        RRCache {
             cache: Vec::with_capacity(size),
             size: size,
             logger: logger,
@@ -27,26 +30,21 @@ impl LFUCache {
     /// and removes old element for pushing new element.
     ///
     /// Return `true`, if the cache have element and `false` otherwise.
-    pub fn hit(&mut self, val: &i32) -> bool {
-        if let Some(pos) = self.cache.iter().position(|x| &x.0 == val) {
+    pub fn hit<R: Rng>(&mut self, val: &i32, rng: &mut R, range: &Range<usize>) -> bool {
+        if self.cache.contains(val) {
             debug!(self.logger, "hit";
                    "cache" => format!("{:?}", self.cache),
                    "hit" => format!("{}", val));
-            self.cache[pos].1 += 1;
             true
         } else {
             if self.cache.len() < self.size {
-                self.cache.push((val.clone(), 1));
+                self.cache.push(val.clone());
             } else {
-                let elem = self.cache.iter()
-                    .position(|x| {
-                        x == self.cache.iter()
-                            .min_by_key(|y| y.1).unwrap()
-                    })
-                    .unwrap();
-                self.cache.remove(elem);
+                let random_index = range.ind_sample(rng);
+                debug!(self.logger, "random index is {}", random_index);
+                self.cache.remove(random_index);
 
-                self.cache.push((val.clone(), 1));
+                self.cache.push(val.clone());
             }
             debug!(self.logger, "miss";
                    "cache" => format!("{:?}", self.cache),
@@ -60,9 +58,11 @@ impl LFUCache {
     /// Return tuple with statistic: `(cache hit, cache miss)`.
     pub fn run(&mut self, ram: &Vec<Vec<i32>>) -> (i32, i32) {
         let mut statistic = (0, 0);
+        let mut rng = rand::thread_rng();
+        let range = Range::new(0, self.size);
         for batch in ram {
             for elem in batch {
-                if self.hit(elem) {
+                if self.hit(elem, &mut rng, &range) {
                     statistic.0 += 1;
                 } else {
                     statistic.1 += 1;

@@ -13,6 +13,7 @@ pub mod fifo;
 pub mod belady;
 pub mod lru;
 pub mod lfu;
+pub mod rr;
 
 /// List of cache algorithms.
 ///
@@ -23,10 +24,10 @@ pub enum Algos {
     FIFO,
     LRU,
     LFU,
+    RR,
     MRU,
     PLRU,
     SLRU,
-    RR,
     TwoQ,
     ARC,
     CAR,
