@@ -6,6 +6,9 @@ use rand;
 use rand::distributions::{Range, IndependentSample};
 use slog;
 
+use std::fs::File;
+use std::io::Read;
+
 /// Structure for creating Vec of batches of Vec<i32>.
 ///
 /// Vec may be generated in direct way:
@@ -37,6 +40,22 @@ impl RamBuilder {
             high: 100,
             logger: logger.unwrap_or(slog::Logger::root(slog::Discard, o!())),
         }
+    }
+
+    /// Set RAM from the file.
+    ///
+    /// Get bytes from the file (element is 8-bit digit).
+    pub fn from_file(logger: Option<slog::Logger>, path: &str) -> Vec<Vec<i32>> {
+        let logger = logger.unwrap_or(slog::Logger::root(slog::Discard, o!()));
+        let mut file = File::open(path).unwrap();
+        let mut buf: Vec<u8> = Vec::new();
+        let size = file.read_to_end(&mut buf).unwrap();
+        debug!(logger, "file({}): {:?}", size, buf);
+
+        // let mut ram = Vec::with_capacity(self.count_batches);
+        vec![buf.into_iter()
+                 .map(|x| x as i32)
+                 .collect()]
     }
 
     /// Set count of batches.
