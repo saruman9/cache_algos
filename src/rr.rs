@@ -1,4 +1,4 @@
-//! Implementation of RR cache algorithm.
+//! Implementation of RR (Random Replacement) cache algorithm.
 //!
 //! Randomly selects a candidate item and discards it to make space when necessary. This algorithm
 //! does not require keeping any information about the access history.

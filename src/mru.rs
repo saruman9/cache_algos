@@ -1,4 +1,4 @@
-//! Implementation of MRU cache algorithm.
+//! Implementation of MRU (Most Recently Used) cache algorithm.
 //!
 //! Discards, in contrast to LRU, the most recently used items first. MRU algorithms are most useful
 //! in situations where the older an item is, the more likely it is to be accessed.

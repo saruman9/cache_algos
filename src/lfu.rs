@@ -1,4 +1,4 @@
-//! Implementation of LFU cache algorithm.
+//! Implementation of LFU (Least-Frequently Used) cache algorithm.
 //!
 //! Counts how often an item is needed. Those that are used least often are discarded first.
 
