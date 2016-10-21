@@ -15,6 +15,7 @@ use cache_algos::belady::BeladyCache;
 use cache_algos::lru::LRUCache;
 use cache_algos::lfu::LFUCache;
 use cache_algos::rr::RRCache;
+use cache_algos::mru::MRUCache;
 
 fn main() {
     let term_log = slog_term::streamer().build();
@@ -34,10 +35,12 @@ fn main() {
     let mut lru_cache = LRUCache::new(cache_size, Some(logger.clone()));
     let mut lfu_cache = LFUCache::new(cache_size, Some(logger.clone()));
     let mut rr_cache = RRCache::new(cache_size, Some(logger.clone()));
+    let mut mru_cache = MRUCache::new(cache_size, Some(logger.clone()));
 
     println!("RR: {:?}", rr_cache.run(&ram));
     println!("FIFO: {:?}", fifo_cache.run(&ram));
     println!("LRU: {:?}", lru_cache.run(&ram));
+    println!("MRU: {:?}", mru_cache.run(&ram));
     println!("LFU: {:?}", lfu_cache.run(&ram));
     println!("Bélády: {:?}", belady_cache.run(&ram));
 }

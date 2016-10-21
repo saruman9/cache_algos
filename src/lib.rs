@@ -14,6 +14,7 @@ pub mod belady;
 pub mod lru;
 pub mod lfu;
 pub mod rr;
+pub mod mru;
 
 /// List of cache algorithms.
 ///
